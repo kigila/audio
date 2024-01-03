@@ -70,7 +70,7 @@ file.addEventListener('change', function(){
 
 function drawVisualizer(bufferLenght, x, barWidth, barHeight, dataArray){
   for (let i = 0; i < bufferLenght; i++) {
-    barHeight = dataArray[i] * 1.5;
+    barHeight = dataArray[i] * 1.5 + 5;
     ctx.save();
     ctx.translate(canvas.width/2, canvas.height/2);
     ctx.rotate(i * Math.PI * 4 / bufferLenght);
