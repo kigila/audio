@@ -30,12 +30,7 @@ container.addEventListener('click', function(){
     x = 0;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     analyser.getByteFrequencyData(dataArray);
-    for (let i = 0; i < bufferLenght; i++) {
-      barHeight = dataArray[i] * 2;
-      ctx.fillStyle = 'white';
-      ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
-      x += barWidth;
-    }
+    drawVisualizer(bufferLenght, x, barWidth, barHeight, dataArray)
     requestAnimationFrame(animate);
   }
 
@@ -66,14 +61,23 @@ file.addEventListener('change', function(){
     x = 0;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     analyser.getByteFrequencyData(dataArray);
-    for (let i = 0; i < bufferLenght; i++) {
-      barHeight = dataArray[i] * 2;
-      ctx.fillStyle = 'white';
-      ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
-      x += barWidth;
-    }
+    drawVisualizer(bufferLenght, x, barWidth, barHeight, dataArray)
     requestAnimationFrame(animate);
   }
 
   animate()
 })
+
+function drawVisualizer(bufferLenght, x, barWidth, barHeight, dataArray){
+  for (let i = 0; i < bufferLenght; i++) {
+    barHeight = dataArray[i] * 2;
+
+    const red = i * barHeight/20;
+    const green = i * 4;
+    const blue = barHeight/2;
+
+    ctx.fillStyle = 'rgb('+ red + ',' + green + ',' + blue + ')';
+    ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
+    x += barWidth;
+  }
+}
