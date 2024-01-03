@@ -17,12 +17,12 @@ container.addEventListener('click', function(){
   analyser = audioCtx.createAnalyser();
   audioSource.connect(analyser);
   analyser.connect(audioCtx.destination);
-  analyser.fftSize = 64;
+  analyser.fftSize = 128;
   const bufferLenght = analyser.frequencyBinCount;
   const dataArray = new Uint8Array(bufferLenght);
 
 
-  const barWidth = (canvas.width/2)/bufferLenght;
+  const barWidth = 5
   let barHeight;
   let x;
 
@@ -48,7 +48,7 @@ file.addEventListener('change', function(){
   analyser = audioCtx.createAnalyser();
   audioSource.connect(analyser);
   analyser.connect(audioCtx.destination);
-  analyser.fftSize = 32;
+  analyser.fftSize = 128;
   const bufferLenght = analyser.frequencyBinCount;
   const dataArray = new Uint8Array(bufferLenght);
 
@@ -70,29 +70,16 @@ file.addEventListener('change', function(){
 
 function drawVisualizer(bufferLenght, x, barWidth, barHeight, dataArray){
   for (let i = 0; i < bufferLenght; i++) {
-    barHeight = dataArray[i] * 2;
+    barHeight = dataArray[i] * 1.5;
+    ctx.save();
+    ctx.translate(canvas.width/2, canvas.height/2);
+    ctx.rotate(i * Math.PI * 4 / bufferLenght);
+    const hue = i * 8;
 
-    const red = i * barHeight/20;
-    const green = i * 4;
-    const blue = barHeight/2;
-    ctx.fillStyle = 'white';
-    ctx.fillRect(canvas.width/2 - x, canvas.height - barHeight - 30, barWidth, 15);
-    ctx.fillStyle = 'rgb('+ red + ',' + green + ',' + blue + ')';
-    ctx.fillRect(canvas.width/2 - x, canvas.height - barHeight, barWidth, barHeight);
+    ctx.fillStyle = 'hsl('+ hue + ',100%, 50%)';
+    ctx.fillRect(0, 0, barWidth, barHeight);
     x += barWidth;
-  }
-
-  for (let i = 0; i < bufferLenght; i++) {
-    barHeight = dataArray[i] * 2;
-
-    const red = i * barHeight/20;
-    const green = i * 4;
-    const blue = barHeight/2;
-    ctx.fillStyle = 'white';
-    ctx.fillRect(x, canvas.height - barHeight - 30, barWidth, 15);
-    ctx.fillStyle = 'rgb('+ red + ',' + green + ',' + blue + ')';
-    ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
-    x += barWidth;
+    ctx.restore();
   }
 
 }
